@@ -1,6 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+
+const HelloWorld = resolve=>{
+  require.ensure(['@/components/HelloWorld'],()=>{
+    resolve(require('@/components/HelloWorld'))
+  })
+}
 
 Vue.use(Router)
 
