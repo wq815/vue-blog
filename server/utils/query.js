@@ -7,25 +7,35 @@ const sqlContent = fs.readFileSync(path.resolve(__dirname, '..', './sql/wq_blog.
 // 这一次连接是为了 创建数据库 并执行 sql 文件建表
 const init = mysql.createConnection(db)
 init.connect();
-let pool ;
-init.query('CREATE DATABASE wq_blog', err => {
-    Object.assign(db, {database})
+let pool;
+init.query("SHOW DATABASES LIKE 'wq_blog'", (err, data) => {
+    Object.assign(db, { database })
     pool = mysql.createPool(db)
-    if (err) {
-        console.log('create database wq_blog err')
+    if (data.length != []) {
+        console.log('已经创建数据库')
     } else {
-        console.log('create database wq_blog success')
-        query(sqlContent).then(res => {
-            console.log('import sql is success')
-        }).catch(err=>{
-            console.log(err)
+        console.log('数据库第一次创建')
+        // 如果数据库存在则不需要执行以下的代码
+        init.query('CREATE DATABASE wq_blog', err => {
+            if (err) {
+                console.log('create database wq_blog err')
+            } else {
+                console.log('create database wq_blog success')
+                query(sqlContent).then(res => {
+                    console.log('import sql is success')
+                }).catch(err => { 
+                    console.log(err)
+                })
+            }
         })
+        init.end();
     }
+    console.log(data);
+    console.log(err)
 })
-init.end();
 export default function query(sql, value) {
     return new Promise((resolve, reject) => {
-        pool.getConnection((err, collection)=>{
+        pool.getConnection((err, collection) => {
             if (err) {
                 reject(err)
             } else {

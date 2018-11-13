@@ -1,9 +1,15 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-const HelloWorld = resolve=>{
-  require.ensure(['@/components/HelloWorld'],()=>{
-    resolve(require('@/components/HelloWorld'))
+const Login = resolve=>{
+  require.ensure(['@/components/Login'],()=>{
+    resolve(require('@/components/Login'))
+  })
+}
+
+const List = resolve=>{
+  require.ensure(['@/components/List'],()=>{
+    resolve(require('@/components/List'))
   })
 }
 
@@ -13,8 +19,19 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      redirect:'/list'
+    },
+    {
+      path: '/login',
+      component:Login
+    },
+    {
+      path:'/list',
+      component:List
+    },
+    {
+      path:'*',
+      redirect:'/list'
     }
   ]
 })
