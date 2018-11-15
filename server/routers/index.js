@@ -1,6 +1,9 @@
 import Router from 'koa-router'
 import {base_API} from '../config'
+import UserController from '../Controller/UserController'
+import ArticleController from '../Controller/ArticleController'
 const router = new Router();
+import checkToken from '../utils/checkToken'
 
 // 前端发来的请求都是 http://loaclhost:3000/api/...
 
@@ -9,8 +12,8 @@ router.get('/',async ctx=>{
 })
 
 router.prefix(`${base_API}`)
-router.get('/index', async ctx=>{
-    ctx.body='首页接口'
-})
+router.post('/login', UserController.login);
+router.get('/logout',checkToken,UserController.logout)
+router.get('/articles',checkToken,ArticleController.getArticles)
 
 export default router
