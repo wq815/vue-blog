@@ -21,13 +21,21 @@ body {
     margin: 0;
     height: 100%;
     min-width: 1024px;
-    min-height: 900px;
 }
 
 body * {
     box-sizing: border-box;
 }
-
+#backimg{
+    width: 100vw;
+    height: 100vh;
+    background-image: url(../image/backimage.jpg);
+    background-size: 100% 100%;
+    position: fixed;
+    top:0;
+    z-index: -1;
+    opacity: .5;
+}
 h3, h4, h5, h6 {
     font-size: 1.6rem;
 }
@@ -42,7 +50,7 @@ a {
 
 .main {
     margin-left: 48px;
-    background: $background;
+    // background: $background;
     padding: .5em 6em;
     height: calc(100% - 48px);
     h2 {
@@ -101,8 +109,8 @@ a {
         color: $word;
         border: 1px solid $word;
         &:hover {
-            color: $base;
-            border: 1px solid $base;
+            color: red;
+            border: 1px solid red;
         }
     }
     .not-del {
@@ -123,7 +131,7 @@ a {
         visibility: hidden;
         cursor: pointer;
         color: $white;
-        line-height: 10px;
+        line-height: 8px;
         text-align: center;
         width: 10px;
         height: 10px;

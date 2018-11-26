@@ -16,7 +16,8 @@ router.beforeEach((to,from,next)=>{
             next();
         }
     }else{
-        if(whiteList.indexOf(to.path)+1){
+        console.log(whiteList.indexOf(to.path))
+        if(whiteList.indexOf(to.path) !== -1){
             next();
         }else{
             next({path:'/login'});

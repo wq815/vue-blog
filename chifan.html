@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html{
+            height: 100%;
+        }
+        body{
+            height: 100%;
+            margin: 0;
+            background-color: skyblue;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        section{
+            width: 500px;
+            height: 500px;
+            /* border: 1px solid black; */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        #content{
+            height: 400px;
+            width: 100%;
+            /* border: 1px solid red; */
+            text-align: center;
+            line-height: 400px;
+            font-size: 80px;
+        }
+        button{
+            background-color: transparent;
+            border: 1px solid silver;
+            width: 300px;
+            height: 100px;
+            text-align: center;
+            line-height: 100px;
+            font-size: 60px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <section>
+        <div id="content"></div>
+        <button onclick="suiji()">吃什么</button>
+    </section>
+</body>
+
+</html>
+<script>
+    let div = document.querySelector('#content')
+    let now = new Date();
+    let hour = now.getHours();
+    let cai = null;
+    let a = 0;
+    console.log(hour)
+    if (hour <= 12) {
+        cai = ['米线', '混沌', '砂锅', '烤肉饭', '盒饭', '面', '凉皮', '麻辣烫', '花甲', '酸辣粉', '盖浇饭']
+    } else {
+        cai = ['包子', '浆面条', '不吃', '馒头配辣条']
+    }
+    let chishaxunhuan = setInterval(function () {
+        a == cai.length - 1 ? a = 0 : a++;
+        div.innerHTML = cai[a];
+    }, 80)
+    function suiji() {
+        clearTimeout(chishaxunhuan);
+        let count = Math.floor(Math.random() * cai.length);
+        div.innerHTML = cai[count]
+    }
+</script>

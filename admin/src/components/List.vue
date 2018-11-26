@@ -1,7 +1,5 @@
 <template>
     <div style="height:100%">
-        <header-nav></header-nav>
-        <Aside></Aside>
         <div class="list-container main">
             <h2>文章列表 /
                 <span>ARTICLE LIST</span>
@@ -10,7 +8,7 @@
             <main>
                 <div class="article-list">
                     <section class="btn-container">
-                        <button id="add" class="not-del" @click="postArticle">新文章</button>
+                        <button id="add" class="not-del" @click="AddArticle">新文章</button>
                     </section>
                     <article-list ref="articleList"></article-list>
                 </div>
@@ -22,9 +20,8 @@
 <script>
 import ArticleList from '@/components/common/ArticleList'
 import Editor from '@/components/common/Editor'
-import Aside from '@/components/common/Aside'
-import HeaderNav from '@/components/common/HeaderNav'
 import md5 from 'md5'
+import request from '@/utils/request'
 export default {
     name:'List',
     data(){
@@ -33,15 +30,27 @@ export default {
         }
     },
     methods:{
-        postArticle(){
-            // console.log(md5(123456))
+        AddArticle(){
+            request({
+                url:'/articles/add',
+                method:'post',
+                data:{}
+            }).then(({data})=>{
+                // console.log(data)
+                const addId = data.insertId;
+                // 调用子组件的 updateArticle 方法更新文章列表
+                this.$refs.articleList.updateList(addId);
+            }).catch(err=>{
+                console.log(err)
+            })
         }
+    },
+    mounted(){
+        // console.log(this.$refs.articleList)
     },
     components:{
         ArticleList,
         Editor,
-        Aside,
-        HeaderNav
     },
 }
 </script>

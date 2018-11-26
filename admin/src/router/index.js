@@ -12,6 +12,21 @@ const List = resolve=>{
     resolve(require('@/components/List'))
   })
 }
+const Tags = resolve=>{
+  require.ensure(['@/components/Tags'],()=>{
+    resolve(require('@/components/Tags'))
+  })
+}
+const ReadBook = resolve=>{
+  require.ensure(['@/components/ReadBook'],()=>{
+    resolve(require('@/components/ReadBook'))
+  })
+}
+const About = resolve=>{
+  require.ensure(['@/components/About'],()=>{
+    resolve(require('@/components/About'))
+  })
+}
 
 Vue.use(Router)
 
@@ -32,6 +47,18 @@ const router = new Router({
     {
       path:'*',
       redirect:'/list'
+    },
+    {
+      path:'/tags',
+      component:Tags
+    },
+    {
+      path:'/readbook',
+      component:ReadBook
+    },
+    {
+      path:'/about',
+      component:About
     }
   ]
 })

@@ -1,18 +1,16 @@
 <template>
     <div class="login-container">
         <header class="login-head">
-            <span>无火的余灰</span>
+            <span>王强O(∩_∩)O</span>
             <img class="logo" src="../assets/image/logo.png" alt="营火">
         </header>
         <section class="form">
             <span class="slogan">登登登登...录!
-                <span>/ Login</span>
             </span>
             <input required name="user" v-validate="'required'" type="text" id="user" placeholder="Username" v-model="loginFrom.username">
             <input required name="password" v-validate="'required'" type="password" id="password" placeholder="Password" v-model="loginFrom.password" @keyup.enter="login">
             <button id="login" @click="login">登录</button>
         </section>
-        <footer>Always.</footer>
         <notifications group='user' position="top center"></notifications>
         <notifications group='admin' position="top center"></notifications>
     </div>
@@ -98,6 +96,7 @@ export default {
     width: 400px;
     height: 250px;
     border-top: 20px solid $base;
+    background-color: rgba(255, 255, 255,.5);
     border-radius: 5px;
     // box-shadow: 4px 4px 5px -3px rgba(0, 0, 0, .3);
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.6);

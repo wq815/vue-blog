@@ -2,7 +2,7 @@ import koa from 'koa'
 import cors from 'koa-cors'
 import bodyparser from 'koa-bodyparser'
 
-import router from './routers/'
+import router from './routers'
 
 import query from './utils/query'
 

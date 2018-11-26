@@ -14,6 +14,7 @@ export default async (ctx, next)=>{
         tokenContent = await jwt.verify(XToken,secret);     //如果token过期或验证失败，将抛出错误
         await next();
     } catch (err) {
+        console.log(err)
         if(err.message == 'jwt expired'){
             ctx.body={
                 code:'401',

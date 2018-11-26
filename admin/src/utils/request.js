@@ -7,6 +7,7 @@ const server = axios.create({
     timeout:5000
 })
 
+
 server.interceptors.request.use(
     config=>{
         if(store.state.token){

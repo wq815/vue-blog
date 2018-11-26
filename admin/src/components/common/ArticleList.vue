@@ -8,11 +8,6 @@
 </template>
 
 <script>
-/**
- * @author
- * @file 文章列表组件
- * */
-
 import moment from 'moment'
 import {mapMutations, mapState, mapActions} from 'vuex'
 import request from '@/utils/request'
@@ -33,202 +28,89 @@ export default {
                     article.isChosen = true
                 }
                 this.articleList.push(...data.data)
-                // 如果有查询到文章，则将第一篇更新为正在编辑的文章
-                // if (this.articleList.length !== 0) {
-                //     this.updateArticle(this.articleList[0])
-                //     this.activeIndex = 0
-                //     const tags = []
-                //     for (let article of this.articleList) {
-                //         if (article.tags) {
-                //             for (let tag of article.tags.split(',')) {
-                //                 if (tags.indexOf(tag) === -1) {
-                //                     tags.push(tag)
-                //                 }
-                //             }
-                //         }
-                //     }
-                //     this.$emit('tags', tags)
-                // }
+                this.activeIndex = 0;
+                if(this.articleList.length !== 0){
+                    this.SET_CURRENT_ARTICLE(this.articleList[this.activeIndex])
+                }
             })
             .catch(err => {
                 console.log(err)
             })
     },
     methods: {
-        updateList(updateId) {
-            axios.get(`/api/v1/articles/${updateId}`)
-                .then(res => {
-                    const article = res.data[0]
+        updateList(updateId){
+            request({
+                url:`/articles/${updateId}`,
+                method:'get'
+            }).then(({data})=>{
+                console.log(data)
+                const article = data[0];
+                article.createTime = moment(article.createTime).format('YYYY年 MM月 DD日 HH:mm:ss');
+                article.isChosen = true;
+                this.articleList.unshift(article);
+                this.activeIndex++;
+            }).catch(err=>{
+                console.log(err)
+            })
+        },
+        select(index){
+            this.activeIndex = index;
+            this.SET_CURRENT_ARTICLE(this.articleList[index])
+        },
+
+        ...mapMutations(['SET_CURRENT_ARTICLE']),
+        
+        showArticlesList(val){
+            request({
+                url:'/articles/get/tags/0',
+                method:'post',
+                data:val
+            }).then(({data})=>{
+                for (let article of data) {
                     article.createTime = moment(article.createTime).format('YYYY年 MMM DD日 HH:mm:ss')
                     article.isChosen = true
-                    this.articleList.unshift(article)
-                    this.activeIndex++
-                    this.updateArticle(this.articleList[this.activeIndex])
-                })
-                .catch(err => alert(err))
-        },
-        updateListByTags(chosenTags) {
-            if (chosenTags.length === 0) {
-                for (let article of this.articleList) {
-                    article.isChosen = true
                 }
-            }
-            else {
-                for (let article of this.articleList) {
-                    let flag = false
-                    for (let tag of chosenTags) {
-                        if (article.tags.indexOf(tag) !== -1) {
-                            flag = true
-                        }
-                    }
-                    if (flag) {
-                        article.isChosen = true
-                    }
-                    else {
-                        article.isChosen = false
-                    }
+                this.articleList = data
+                this.activeIndex = 0;
+                if(this.articleList.length !== 0){
+                    this.SET_CURRENT_ARTICLE(this.articleList[this.activeIndex])
                 }
-
-                for (let [index, article] of this.articleList.entries()) {
-                    if (article.isChosen) {
-                        this.activeIndex = index
-                        this.updateArticle(this.articleList[this.activeIndex])
-                        break
-                    }
-                }
-            }
+            }).catch(err=>{
+                console.log(err)
+            })
         },
-        updateArticleTag(oldVal, newVal, chosenTags) {
-            for (let [i, article] of this.articleList.entries()) {
-                if (article.tags.length) {
-                    const tags = article.tags.split(',')
-                    const index = tags.indexOf(oldVal)
-                    if (index !== -1) {
-                        const newIndex = tags.indexOf(newVal)
-                        // 如果新值在该文章中已经有了，则直接删除旧值，否则将旧值修改为新值
-                        if (newIndex === -1) {
-                            tags[index] = newVal
-                            article.tags = tags.join(',')
-                            request.put(
-                                `/tags/${article.id}`,
-                                {
-                                    tags: article.tags
-                                },
-                                {
-                                    headers: {
-                                        Authorization: `Bearer ${localStorage.ashenToken}`
-                                    }
-                                })
-                                .catch(err => alert(err))
-                        }
-                        else {
-                            this.deleteSpecArticleTag(oldVal, i)
-                        }
-                        this.updateListByTags(chosenTags)
-                    }
-                }
-            }
-            // 防止更改了activeIndex的article，所以提交一个mutation
-            this.updateArticle(this.articleList[this.activeIndex])
-        },
-        deleteSpecArticleTag(tag, i) {
-            const article = this.articleList[i]
-            article.tags = article.tags.split(',')
-            const index = article.tags.indexOf(tag)
-            article.tags.splice(index, 1)
-            article.tags = article.tags.join(',')
-            request.put(
-                `/tags/${article.id}`,
-                {
-                    tags: article.tags
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.ashenToken}`
-                    }
-                })
-                .catch(err => alert(err))
-        },
-        deleteArticleTag(tag) {
-            for (let article of this.articleList) {
-                if (article.tags.length) {
-                    const tags = article.tags.split(',')
-                    const index = tags.indexOf(tag)
-                    if (index !== -1) {
-                        if (tags.length === 1 && article.isPublished === 1) {
-                            console.error('已发布文章请至少保持一个tag!')
-                        }
-                        else {
-                            tags.splice(index, 1)
-                            article.tags = tags.join(',')
-                            request.put(
-                                `/tags/${article.id}`,
-                                {
-                                    tags: article.tags
-                                },
-                                {
-                                    headers: {
-                                        Authorization: `Bearer ${localStorage.ashenToken}`
-                                    }
-                                })
-                                .catch(err => alert(err))
-                        }
-                    }
-                }
-            }
-            // 防止更改了activeIndex的article，所以提交一个mutation
-            this.updateArticle(this.articleList[this.activeIndex])
-        },
-        select(index) {
-            // 选择需要编辑的文章
-            this.activeIndex = index
-            this.updateArticle(this.articleList[index])
-        },
-        ...mapMutations([
-            'updateArticle'
-        ])
     },
     // 引入 vuex 中的全局变量，和 mutations 中的方法，要放到计算属性中
     computed: {
         ...mapState(['id','title', 'tags', 'content', 'isPublished', 'toggleDelete']),
-        ...mapMutations(['SET_CURRENT_ARTICLE']),
-        // ...mapActions([''])
     },
     watch: {
-        title(val) {
-            if (this.articleList.length !== 0) {
-                this.articleList[this.activeIndex].title = val
-            }
+        title(val){
+            this.articleList[this.activeIndex].title = val;
         },
-        tags(val) {
-            if (this.articleList.length !== 0) {
-                this.articleList[this.activeIndex].tags = val
-            }
+        tags(val){
+            this.articleList[this.activeIndex].tags = val;
         },
-        content(val) {
-            if (this.articleList.length !== 0) {
-                this.articleList[this.activeIndex].content = val
-            }
+        content(val){
+            this.articleList[this.activeIndex].content = val;
         },
-        isPublished(val) {
-            if (this.articleList.length !== 0) {
-                this.articleList[this.activeIndex].isPublished = val
-            }
+        isPublished(val){
+            this.articleList[this.activeIndex].isPublished = val;
         },
-        toggleDelete(val) {
-            this.articleList.splice(this.activeIndex, 1)
-            if (this.activeIndex === this.articleList.length) {
+        toggleDelete(val){
+            this.articleList.splice(this.activeIndex,1)
+            if(this.activeIndex == this.articleList.length){
                 this.activeIndex--
             }
-            if (this.articleList.length !== 0) {
-                this.updateArticle(this.articleList[this.activeIndex])
-            }
-            else {
-                this.updateArticle({
-                    id: '',
-                    title: '',
-                    tags: '',
-                    content: ''
+            if(this.articleList.length !== 0){
+                this.SET_CURRENT_ARTICLE(this.articleList[this.activeIndex])
+            }else{
+                this.SET_CURRENT_ARTICLE({
+                    id:'',
+                    title:'',
+                    tags:'',
+                    content:'',
+                    isPublished:''
                 })
             }
         }

@@ -20,6 +20,15 @@ const mutations = {
     // 文章是否发布
     SET_PUBLISH_STATE:(state)=>{
         state.isPublished = 1;
+    },
+    SET_TITLE:(state,title)=>{
+        state.title = title
+    },
+    SET_TAGS:(state,tags)=>{
+        state.tags = tags.join(',')
+    },
+    SET_CONTENT:(state,content)=>{
+        state.content = content
     }
 }
 

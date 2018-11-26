@@ -1,8 +1,8 @@
 <template>
     <aside class="side-nav">
-        <router-link to="/lists" class="link">
+        <router-link to="/list" class="link">
             <svg class="icon" aria-hidden="true">
-                <use xlink:href="#icon-liebiao"></use>
+                <use xlink:href="#icon-icon--"></use>
             </svg>
             <p class="descript">列表</p>
         </router-link>
@@ -12,15 +12,15 @@
             </svg>
             <p class="descript">标签</p>
         </router-link>
-        <router-link to="/readinglists" class="link">
+        <router-link to="/readbook" class="link">
             <svg class="icon" aria-hidden="true">
-                <use xlink:href="#icon-yuedu"></use>
+                <use xlink:href="#icon-yuedureading19-copy"></use>
             </svg>
             <p class="descript">阅读</p>
         </router-link>
         <router-link to="/about" class="link">
             <svg class="icon" aria-hidden="true">
-                <use xlink:href="#icon-wo"></use>
+                <use xlink:href="#icon-wo1"></use>
             </svg>
             <p class="descript">朕</p>
         </router-link>
@@ -40,13 +40,14 @@ export default {}
     float: left;
     @include flex($flow: column wrap);
     font-size: 1.6rem;
-    height: calc(100% - 3em);
+    height: 100%;
     width: 3em;
-    background: $word;
+    background: rgba(52, 73, 94,.8);
 }
 
 .link {
     @include flex($flow: column wrap);
+    padding-top: .6em;
     margin-bottom: 3em;
     width: 100%;
     .icon {

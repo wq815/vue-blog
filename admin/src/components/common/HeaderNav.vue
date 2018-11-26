@@ -6,12 +6,12 @@
         <div class="content-container">
             <section>
                 <h4 class="title">
-                    无火的余灰
+                    王强O(∩_∩)O
                 </h4>
             </section>
             <a class="log-out" @click="logOut">
                 <svg class="icon" aria-hidden="true">
-                    <use xlink:href="#icon-tuichu"></use>
+                    <use xlink:href="#icon-icon4"></use>
                 </svg>
                 <span>&nbsp;登出</span>
             </a>

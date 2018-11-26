@@ -30,8 +30,8 @@ init.query("SHOW DATABASES LIKE 'wq_blog'", (err, data) => {
         })
         init.end();
     }
-    console.log(data);
-    console.log(err)
+    // console.log(data);
+    // console.log(err)
 })
 export default function query(sql, value) {
     return new Promise((resolve, reject) => {
